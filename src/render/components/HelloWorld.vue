@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import type { Order } from '@main/order/order.entity'
 
 const props = defineProps({
   title: {
@@ -8,36 +8,24 @@ const props = defineProps({
   },
 })
 
-const { getOrders, addOrder, ordersStream } = window.electron
-
-const log = ref('')
-const msg = ref('')
-async function onClick() {
-  console.log(await getOrders())
-}
+const {
+  addOrder,
+  ordersStream,
+} = window.electron
 
 async function insertFakeOrder() {
-  console.log(await addOrder())
+  await addOrder()
 }
 
-ordersStream((msg: unknown) => {
-  console.log(msg)
+ordersStream((order: Order) => {
+  console.log('New order:', order)
 })
 </script>
 
 <template>
-  <h1>{{ props.title }}</h1>
-
-  <textarea v-model="log" cols="60" rows="10" disabled />
-  <div style="margin-top: 20px">
-    <input v-model="msg" type="text" placeholder="send msg to main process">
-    <button style="margin-left: 20px" @click="onClick">
-      Send
-    </button>
-    <button style="margin-left: 20px" @click="insertFakeOrder">
-      Fake Order
-    </button>
-  </div>
+  <button style="margin-left: 20px" @click="insertFakeOrder">
+    Create new order
+  </button>
 </template>
 
 <style>

@@ -1,17 +1,21 @@
-import { Window } from '@doubleshot/nest-electron'
-import { Order } from '@main/order/order.entity'
-import type { BrowserWindow } from 'electron'
-import { EventSubscriber } from 'typeorm'
-import type {
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import {
   DataSource,
   EntitySubscriberInterface,
-  InsertEvent, RemoveEvent, UpdateEvent,
+  EventSubscriber,
+  InsertEvent,
+  RemoveEvent,
+  UpdateEvent,
 } from 'typeorm'
+
+import { Order } from '@main/order/order.entity'
+import type { BrowserWindow } from 'electron'
+import { Window } from '@doubleshot/nest-electron'
 
 @EventSubscriber()
 export class OrderSubscriber implements EntitySubscriberInterface<Order> {
   constructor(
-    dataSource: DataSource,
+    private dataSource: DataSource,
       @Window() private readonly mainWin: BrowserWindow,
   ) {
     dataSource.subscribers.push(this)
@@ -23,16 +27,17 @@ export class OrderSubscriber implements EntitySubscriberInterface<Order> {
 
   afterInsert(event: InsertEvent<Order>) {
     const { webContents } = this.mainWin
-    webContents.send('reply-msg', event.entity)
+    console.log(event.entity)
+    webContents.send('new-orders', event.entity)
   }
 
   afterUpdate(event: UpdateEvent<Order>) {
     const { webContents } = this.mainWin
-    webContents.send('reply-msg', event.entity)
+    webContents.send('new-orders', event.entity)
   }
 
   afterRemove(event: RemoveEvent<Order>) {
     const { webContents } = this.mainWin
-    webContents.send('reply-msg', event.entity)
+    webContents.send('new-orders', event.entity)
   }
 }

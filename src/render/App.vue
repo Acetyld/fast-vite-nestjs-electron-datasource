@@ -3,7 +3,6 @@ import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" class="logo">
   <HelloWorld title="Vite + Electron & Esbuild" />
 </template>
 

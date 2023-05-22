@@ -1,3 +1,4 @@
+import { ElectronExternalModule } from '@main/electron_external.module'
 import { OrderController } from '@main/order/order.controller'
 import { Order } from '@main/order/order.entity'
 import { OrderService } from '@main/order/order.service'
@@ -7,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 
 @Module({
   imports: [
+    ElectronExternalModule,
     TypeOrmModule.forFeature([Order]),
   ],
   controllers: [OrderController],
